@@ -44,16 +44,22 @@ const App = () => {
 
   const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLButtonElement;
-    const currentProduct = cartList.find((p) => p.name == target.value);
+    const product = productList.find((p) => p.name == target.value);
+    const cartItem = cartList.find((p) => p.name == target.value);
 
-    if (currentProduct != undefined) {
+    if (cartItem != undefined) {
       setCartList((prev) => {
-        const deleteIndex = prev.indexOf(currentProduct);
-        prev.splice(deleteIndex, 1);
+        const deleteIndex = prev.indexOf(cartItem);
+        if (prev[deleteIndex].count == 1) {
+          prev.splice(deleteIndex, 1);
+        } else {
+          prev[deleteIndex].count -= 1;
+          prev[deleteIndex].totalPrice -= product!.price;
+        }
 
         return prev;
       });
-      setFee((prev) => prev - currentProduct.totalPrice);
+      setFee((prev) => prev - product!.price);
     }
   };
 
