@@ -10,9 +10,10 @@ export interface CartCardProps {
   name: string;
   count: number;
   totalPrice: number;
+  handleDelete: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const CartCard = ({ name, totalPrice, count }: CartCardProps) => (
+const CartCard = ({ name, totalPrice, count, handleDelete }: CartCardProps) => (
   <div
     style={{
       display: 'flex',
@@ -25,7 +26,9 @@ const CartCard = ({ name, totalPrice, count }: CartCardProps) => (
     <div>
       {name}, {count}개, ${totalPrice}
     </div>
-    <button type='button'>delete</button>
+    <button type='button' onClick={handleDelete} value={name}>
+      delete
+    </button>
   </div>
 );
 
