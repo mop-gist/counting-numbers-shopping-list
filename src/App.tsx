@@ -16,14 +16,26 @@ const App = () => {
     const target = e.target as HTMLButtonElement;
     const currentProduct = productList.find((p) => p.name == target.value);
     if (currentProduct != undefined) {
-      setCartList((prev) => [
-        ...prev,
-        {
-          name: currentProduct.name,
-          totalPrice: currentProduct.price,
-          count: 1,
-        },
-      ]);
+      if (cartList.find((p) => p.name == currentProduct.name) == undefined) {
+        setCartList((prev) => [
+          ...prev,
+          {
+            name: currentProduct.name,
+            totalPrice: currentProduct.price,
+            count: 1,
+          },
+        ]);
+      } else {
+        setCartList((prev) => {
+          const cartItem = prev.find((p) => p.name == currentProduct.name);
+          const addIndex = prev.indexOf(cartItem!);
+
+          prev[addIndex].totalPrice += currentProduct.price;
+          prev[addIndex].count += 1;
+
+          return prev;
+        });
+      }
       setFee((prev) => prev + currentProduct.price);
     } else {
       alert(`product ${target.value} does not exist!`);
