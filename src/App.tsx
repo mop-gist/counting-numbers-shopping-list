@@ -29,6 +29,8 @@ const App = () => {
         setCartList((prev) => {
           const cartItem = prev.find((p) => p.name == currentProduct.name);
           const addIndex = prev.indexOf(cartItem!);
+                                        
+          prev = [...prev]
 
           prev[addIndex].totalPrice += currentProduct.price;
           prev[addIndex].count += 1;
@@ -50,6 +52,7 @@ const App = () => {
     if (cartItem != undefined) {
       setCartList((prev) => {
         const deleteIndex = prev.indexOf(cartItem);
+        prev = [...prev]
         if (prev[deleteIndex].count == 1) {
           prev.splice(deleteIndex, 1);
         } else {
