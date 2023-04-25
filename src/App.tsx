@@ -1,88 +1,21 @@
 import React from 'react';
-import ProductCard, { Product } from '@/components/productCard/productCard';
+import ProductCard from '@/components/productCard/productCard';
 import CartCard from '@/components/cartCard/cartCard';
-import { CartItem } from '@/context/shoppingListContext';
+import { useShoppingList } from '@/context/shoppingListContext';
 import { productList } from '@/const/product';
 
 const App = () => {
-  const products: Product[] = productList;
-
-  const [cartList, setCartList] = React.useState<Array<CartItem>>([]);
-
-  const [fee, setFee] = React.useState<number>(0);
-
-  const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const target = e.target as HTMLButtonElement;
-    const currentProduct = products.find((p) => p.name == target.value);
-    if (currentProduct != undefined) {
-      if (cartList.find((p) => p.name == currentProduct.name) == undefined) {
-        setCartList((prev) => [
-          ...prev,
-          {
-            name: currentProduct.name,
-            totalPrice: currentProduct.price,
-            quantity: 1,
-          },
-        ]);
-      } else {
-        setCartList((prev) => {
-          const cartItem = prev.find((p) => p.name == currentProduct.name);
-          const addIndex = prev.indexOf(cartItem!);
-
-          prev = [...prev];
-
-          prev[addIndex].quantity += 1;
-
-          return prev;
-        });
-      }
-      setFee((prev) => prev + currentProduct.price);
-    } else {
-      alert(`product ${target.value} does not exist!`);
-    }
-  };
-
-  const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLButtonElement;
-    const product = products.find((p) => p.name == target.value);
-    const cartItem = cartList.find((p) => p.name == target.value);
-
-    if (cartItem != undefined) {
-      setCartList((prev) => {
-        const deleteIndex = prev.indexOf(cartItem);
-        prev = [...prev];
-        if (prev[deleteIndex].quantity == 1) {
-          prev.splice(deleteIndex, 1);
-        } else {
-          prev[deleteIndex].quantity -= 1;
-        }
-
-        return prev;
-      });
-      setFee((prev) => prev - product!.price);
-    }
-  };
+  const { cartItems } = useShoppingList();
 
   return (
     <>
-      {products.map((product, index) => (
-        <ProductCard
-          name={product.name}
-          price={product.price}
-          key={index}
-          handleAdd={handleAdd}
-        />
+      {productList.map((product, index) => (
+        <ProductCard name={product.name} price={product.price} key={index} />
       ))}
       <h3>Cart</h3>
-      {cartList.map((item, index) => (
-        <CartCard
-          key={index}
-          name={item.name}
-          count={item.quantity}
-          handleDelete={handleDelete}
-        />
+      {cartItems?.map((item, index) => (
+        <CartCard key={index} name={item.name} />
       ))}
-      <h4>Total: {fee}</h4>
     </>
   );
 };

@@ -27,9 +27,13 @@ const CartCard = ({ name }: CartCardProps) => {
         }}
       >
         <div>
-          {name}, {quantity}개, ${getTotalPrice}
+          {name}, {quantity}개, ${getTotalPrice()}
         </div>
-        <button type='button' onClick={() => decreaseItemQuantity} value={name}>
+        <button
+          type='button'
+          onClick={() => decreaseItemQuantity(name)}
+          value={name}
+        >
           delete
         </button>
       </div>

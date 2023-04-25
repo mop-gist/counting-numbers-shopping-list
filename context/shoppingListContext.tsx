@@ -21,7 +21,10 @@ export function useShoppingList() {
   return useContext(ShoppingListContext);
 }
 
-export function ShoppingListProvider(children: React.ReactNode) {
+interface ShoppingListProviderProps {
+  children: React.ReactNode;
+}
+export function ShoppingListProvider({ children }: ShoppingListProviderProps) {
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
 
   function getItemQuantity(name: string) {
