@@ -2,12 +2,10 @@ import React from 'react';
 import ProductCard, { Product } from '@/components/productCard/productCard';
 import CartCard from '@/components/cartCard/cartCard';
 import { CartItem } from '@/context/shoppingListContext';
+import { productList } from '@/const/product';
 
 const App = () => {
-  const productList: Product[] = [
-    { name: 'pencil', price: 1 },
-    { name: 'eraser', price: 5 },
-  ];
+  const products: Product[] = productList;
 
   const [cartList, setCartList] = React.useState<Array<CartItem>>([]);
 
@@ -15,7 +13,7 @@ const App = () => {
 
   const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;
-    const currentProduct = productList.find((p) => p.name == target.value);
+    const currentProduct = products.find((p) => p.name == target.value);
     if (currentProduct != undefined) {
       if (cartList.find((p) => p.name == currentProduct.name) == undefined) {
         setCartList((prev) => [
@@ -46,7 +44,7 @@ const App = () => {
 
   const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLButtonElement;
-    const product = productList.find((p) => p.name == target.value);
+    const product = products.find((p) => p.name == target.value);
     const cartItem = cartList.find((p) => p.name == target.value);
 
     if (cartItem != undefined) {
@@ -67,7 +65,7 @@ const App = () => {
 
   return (
     <>
-      {productList.map((product, index) => (
+      {products.map((product, index) => (
         <ProductCard
           name={product.name}
           price={product.price}
