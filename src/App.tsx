@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductCard, { Product } from '@/components/productCard/productCard';
-import CartCard, { CartItem } from '@/components/cartCard/cartCard';
+import CartCard from '@/components/cartCard/cartCard';
+import { CartItem } from '@/context/shoppingListContext';
 
 const App = () => {
   const productList: Product[] = [
@@ -22,18 +23,17 @@ const App = () => {
           {
             name: currentProduct.name,
             totalPrice: currentProduct.price,
-            count: 1,
+            quantity: 1,
           },
         ]);
       } else {
         setCartList((prev) => {
           const cartItem = prev.find((p) => p.name == currentProduct.name);
           const addIndex = prev.indexOf(cartItem!);
-                                        
-          prev = [...prev]
 
-          prev[addIndex].totalPrice += currentProduct.price;
-          prev[addIndex].count += 1;
+          prev = [...prev];
+
+          prev[addIndex].quantity += 1;
 
           return prev;
         });
@@ -52,12 +52,11 @@ const App = () => {
     if (cartItem != undefined) {
       setCartList((prev) => {
         const deleteIndex = prev.indexOf(cartItem);
-        prev = [...prev]
-        if (prev[deleteIndex].count == 1) {
+        prev = [...prev];
+        if (prev[deleteIndex].quantity == 1) {
           prev.splice(deleteIndex, 1);
         } else {
-          prev[deleteIndex].count -= 1;
-          prev[deleteIndex].totalPrice -= product!.price;
+          prev[deleteIndex].quantity -= 1;
         }
 
         return prev;
@@ -81,8 +80,7 @@ const App = () => {
         <CartCard
           key={index}
           name={item.name}
-          count={item.count}
-          totalPrice={item.totalPrice}
+          count={item.quantity}
           handleDelete={handleDelete}
         />
       ))}
